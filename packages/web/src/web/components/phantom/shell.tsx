@@ -1,18 +1,17 @@
 import {createContext,useContext,useEffect,useState,type ReactNode} from 'react';
 import {Link,useLocation} from 'wouter';
-import {asset,getDoc,href} from '../../lib/site';
+import {getDoc,href} from '../../lib/site';
+import {useSiteAudio,type EffectName} from '../../lib/sound';
 import {Rich} from './media';
-const SoundContext=createContext({sound:false,toggle:()=>{},click:()=>{}});
+const SoundContext=createContext({sound:false,toggle:()=>{},click:()=>{},enable:()=>{},effect:(_name:EffectName)=>{}});
 export const useSound=()=>useContext(SoundContext);
 export function Shell({children}:{children:ReactNode}){
- const [location]=useLocation();const [sound,setSound]=useState(()=>localStorage.getItem('phantom-sound')==='true');const [cookies,setCookies]=useState(()=>!localStorage.getItem('phantom-cookie'));
+ const [location]=useLocation();const audio=useSiteAudio(location);const {sound,toggle,click}=audio;const [cookies,setCookies]=useState(()=>!localStorage.getItem('phantom-cookie'));
  const [time,setTime]=useState(new Date());useEffect(()=>{const id=setInterval(()=>setTime(new Date()),30000);return()=>clearInterval(id)},[]);
- const click=()=>{if(sound){const audio=new Audio(asset('https://www.phantom.land/assets/sounds/click.mp3'));audio.volume=.25;audio.play().catch(()=>{})}};
- const toggle=()=>{const next=!sound;setSound(next);localStorage.setItem('phantom-sound',String(next));if(next){const a=new Audio(asset('https://www.phantom.land/assets/sounds/load.mp3'));a.volume=.25;a.play().catch(()=>{})}};
  useEffect(()=>{window.scrollTo(0,0);document.title=location==='/'?'Phantom — Technology Creative':`${location.split('/').pop()?.replaceAll('-',' ')} — Phantom`;},[location]);
  const agency=location.startsWith('/about'),career=location.startsWith('/careers'),contact=location.startsWith('/contact');
  const clock=(zone:string)=>new Intl.DateTimeFormat('en-GB',{timeZone:zone,hour:'2-digit',minute:'2-digit'}).format(time);
- return <SoundContext.Provider value={{sound,toggle,click}}><div className="site-shell">
+ return <SoundContext.Provider value={audio}><div className="site-shell">
   <header className="site-header">
    <Link href="/" className="ghost-logo" aria-label="Phantom home" onClick={click}><img src={getDoc('header')?.data.logo.url} alt="Phantom"/></Link>
    <button className="sound-button mono" onClick={toggle} aria-label={sound?'Disable sound':'Enable sound'}><span className={'equalizer '+(sound?'playing':'')}>{Array.from({length:12},(_,i)=><i key={i} style={{animationDelay:`${i*.08}s`}}/>)}</span>SOUND [{sound?'ON':'OFF'}]</button>

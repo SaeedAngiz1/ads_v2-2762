@@ -10,6 +10,11 @@ Source reference: https://www.phantom.land
 - Contact, Privacy Policy, AI Policy and Modern Slavery Statement.
 - Original public fonts, branding, still images, videos, sound effects, model and atlas assets.
 - Responsive layouts, sound opt-in, cookie-preference persistence and reduced-motion support.
+- Original looping background tracks for the work grid, project pages and other pages, with route crossfades and hover, swipe, click and opening sound effects.
+- Black title/green-progress opening screen, sliding/skewed titles, original character-frame pixelation and morph sequence, reconstructed particle exit and grid entrance.
+- Colored WebGL tile hover backgrounds and link, archive-row and related-project hover treatments.
+
+Audio starts after a click/tap because browsers restrict autoplay. Use the opening's “CLICK TO ENABLE SOUND” prompt or the header sound switch. The consent preference persists, but a browser may require another gesture after a full document reload. Music pauses when the document is hidden. The opening runs on full homepage loads, not each internal navigation back to Work.
 
 ## Deliberate differences and limitations
 

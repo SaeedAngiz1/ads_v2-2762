@@ -30,3 +30,13 @@ Recreate the full public Phantom website on the managed React stack.
 
 ## Boundaries
 Contact and job forms must not silently submit to the real agency. Provide explicit local demo saving; no false delivery claims.
+
+## Music, hover and opening refinement
+- [x] Localize the original grid, other-page and project background music plus 50 desktop/mobile opening frames.
+- [x] Implement looping route-specific music, opt-in consent, mute/resume, visibility handling and crossfades; verify advancing playback and original volume levels in Chrome.
+- [x] Add throttled hover/pan/click/intro sounds and colored per-tile WebGL hover backgrounds; verify canvas hover hit, pointer cursor and sound playback.
+- [x] Rebuild the black title/green-progress loader, opposing title exits, pixelation, character morphs and particle exit before the homepage.
+- [x] Verify clickable/tappable intro sound consent, full-document re-entry, no repeated intro during internal navigation, mobile layout and reduced motion.
+- [x] Inspect frozen desktop/mobile loader and morph screenshots; fix mobile source-image aspect ratio.
+- [x] Final lint, typecheck and production build pass; runtime test reports zero page errors.
+- Evidence: `/home/user/phantom-research/details-test.log`, `details-build-final.log`, `verified-{desktop,mobile}-{loader,morph}.png`.

@@ -9,11 +9,12 @@ import {Pills} from '../components/phantom/media';
 import {useSound} from '../components/phantom/shell';
 
 type Filter={zone:string[];feature:string[];service:string[];client:string[]};
+let enteredThisBoot=false;
 const blank:Filter={zone:[],feature:[],service:[],client:[]};
 function queryFilters():Filter{const params=new URLSearchParams(window.location.search);return Object.fromEntries(Object.keys(blank).map(key=>[key,params.getAll(key).flatMap(v=>v.split(',')).filter(Boolean)])) as Filter;}
 export default function Home(){
- usePageTheme();const [,navigate]=useLocation();const {click}=useSound();
- const [intro,setIntro]=useState(()=>!sessionStorage.getItem('phantom-intro')),[ready,setReady]=useState(false),[mode,setMode]=useState<'grid'|'list'>('grid'),[open,setOpen]=useState(false),[filters,setFilters]=useState<Filter>(queryFilters),[search,setSearch]=useState(''),[sort,setSort]=useState(false);
+ usePageTheme();const [,navigate]=useLocation();const {click,effect}=useSound();
+ const [intro,setIntro]=useState(()=>!enteredThisBoot),[ready,setReady]=useState(false),[mode,setMode]=useState<'grid'|'list'>('grid'),[open,setOpen]=useState(false),[filters,setFilters]=useState<Filter>(queryFilters),[search,setSearch]=useState(''),[sort,setSort]=useState(false);
  useEffect(()=>{const params=new URLSearchParams();for(const [key,values] of Object.entries(filters))for(const value of values)params.append(key,value);const query=params.toString();window.history.replaceState(window.history.state,'',window.location.pathname+(query?'?'+query:''));},[filters]);
  useEffect(()=>{const update=()=>setFilters(queryFilters());window.addEventListener('popstate',update);return()=>window.removeEventListener('popstate',update);},[]);
  const visible=useMemo(()=>projects.filter(p=>{
@@ -21,10 +22,10 @@ export default function Home(){
  }),[filters,search]);
  const filtered=useMemo(()=>cells.filter(c=>visible.some(p=>p.id===c.id)),[visible]);const ordered=sort?[...visible].reverse():visible;const years=[...new Set(ordered.map(p=>p.data.launch_date?.slice(0,4)))];
  const toggle=(key:keyof Filter,value:string)=>{click();setFilters(f=>({...f,[key]:f[key].includes(value)?f[key].filter(x=>x!==value):[...f[key],value]}))};
- const complete=()=>{sessionStorage.setItem('phantom-intro','true');setIntro(false)};
+ const complete=()=>{enteredThisBoot=true;setIntro(false)};
  useEffect(()=>{const fn=(e:KeyboardEvent)=>{if(e.key==='Escape')setOpen(false)};window.addEventListener('keydown',fn);return()=>window.removeEventListener('keydown',fn)},[]);
  return <main className={'home-page '+(mode==='list'?'list-mode':'')+(open?' filters-open':'')}>
-  <Wall filtered={filtered} onSelect={slug=>{click();navigate('/projects/'+slug)}} onReady={()=>setReady(true)}/>
+  <Wall onHover={()=>effect('whoosh')} onPan={()=>effect('swipe')} filtered={filtered} onSelect={slug=>{click();navigate('/projects/'+slug)}} onReady={()=>setReady(true)}/>
   <div className="wall-vignette"/>
   {mode==='list'&&<section className="archive"><div className="archive-heading"><h1>{search?'Search results':'All projects'}</h1><h2>{visible.length} projects</h2><button aria-label="Reverse chronological order" onClick={()=>setSort(!sort)}><ArrowDown size={22}/></button></div>
    {years.map(year=><div className="archive-year" key={year}><h3>{year}</h3><div className="archive-rows">{ordered.filter(p=>p.data.launch_date?.startsWith(year)).map(p=><Link href={'/projects/'+p.uid} key={p.id} className="archive-row" onClick={click}><span className="archive-title">{p.data.title}</span><Pills items={[p.data.zone.uid,...p.data.features.slice(0,3).map((f:any)=>f.feature.uid)]}/><span className="archive-client">{p.data.clients.map((c:any)=>docs.find(x=>x.id===c.client.id)?.data.client_name).filter(Boolean).slice(0,1).join(', ')}</span></Link>)}</div></div>)}

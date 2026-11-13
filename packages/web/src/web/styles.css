@@ -23,3 +23,29 @@
 .related-work h2{font-weight:800;letter-spacing:-.025em}
 @media(max-width:700px){.about-intro h1{font-size:9.7vw}.careers-intro h2{font-size:34px}}
 .phantom-intro{width:100%;height:100%}.filter-scrim{width:100%;height:100%}
+/* Original two-stage boot: title/progress, pixelated morphs, particle exit. */
+.phantom-intro{background:#000;animation:none;cursor:default;transition:background .65s}
+.site-shell:has(.phantom-intro) .cookie-banner{visibility:hidden;pointer-events:none}
+.phantom-intro:after{display:none}.phantom-intro.intro-exit{background:transparent}
+.phantom-intro>canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+.boot-loader{position:absolute;inset:0;z-index:2;background:#000;pointer-events:none}
+.boot-type{display:flex;justify-content:center;align-items:center;gap:1rem;position:absolute;top:50%;left:0;width:100%;transform:translateY(-50%)}
+.boot-type h2{font-size:clamp(16px,1.5vw,28px);font-weight:400;letter-spacing:0;line-height:1.1;white-space:nowrap}.boot-type h2:first-child{font-weight:500}.boot-type span{display:inline-block}
+.boot-progress{position:absolute;bottom:0;left:0;height:.4vh;width:100%;background:#1eff66;transform-origin:left;transition:transform .6s cubic-bezier(1,.01,.22,1)}
+.intro-reveal .boot-loader{animation:boot-fade .5s .55s both}
+.intro-reveal .boot-type h2:first-child{animation:boot-left 1s cubic-bezier(.81,-.01,0,1) .2s both}
+.intro-reveal .boot-type h2:last-child{animation:boot-right 1s cubic-bezier(.81,-.01,0,1) .2s both}
+.intro-reveal .boot-type h2:first-child span{animation:boot-skew-left 1s cubic-bezier(.81,-.01,0,1) .2s both}
+.intro-reveal .boot-type h2:last-child span{animation:boot-skew-right 1s cubic-bezier(.81,-.01,0,1) .2s both}
+.intro-frames .boot-loader,.intro-exit .boot-loader{display:none}
+.intro-sound-hit{position:absolute;inset:0;width:100%;height:100%;z-index:3;text-align:left;cursor:pointer}
+.intro-sound-label{position:absolute;top:0;left:0;transform:translate(calc(50vw - 65px),calc(100dvh - 110px));font-size:10px;white-space:nowrap;display:flex;align-items:center;gap:8px;pointer-events:none;color:#fff}
+.intro-sound-label:before{content:'';display:block;width:20px;height:10px;background:repeating-linear-gradient(to right,#fff8 0 1px,transparent 1px 3px);opacity:.65}
+.intro-exit .intro-sound-hit{opacity:0;pointer-events:none;transition:opacity .3s}
+@keyframes boot-fade{to{opacity:0}}@keyframes boot-left{to{transform:translateX(-55vw)}}@keyframes boot-right{to{transform:translateX(55vw)}}@keyframes boot-skew-left{to{transform:skewX(-55deg)}}@keyframes boot-skew-right{to{transform:skewX(55deg)}}
+@media(max-width:700px){.boot-type{flex-direction:column}.intro-reveal .boot-type h2:first-child{animation-name:boot-up}.intro-reveal .boot-type h2:last-child{animation-name:boot-down}@keyframes boot-up{to{transform:translateY(-55vh)}}@keyframes boot-down{to{transform:translateY(55vh)}}}
+/* Interface hover affordances in addition to the per-cell WebGL color bloom. */
+.archive-row{position:relative;transition:background .35s,opacity .2s,transform .35s}.archive-row:hover{opacity:1;background:#ffffff0c}.archive-title{transition:transform .35s}.archive-row:hover .archive-title{transform:translateX(9px)}
+.role-link h3,.live-link span,.zone-description a{transition:transform .35s}.role-link:hover h3{transform:translateX(8px)}.live-link:hover span{transform:rotate(45deg)}.zone-description a:hover{transform:translateX(6px)}
+.related-work a .media{transition:transform .6s,filter .6s}.related-work a:hover .media{transform:scale(.98);filter:brightness(1.12)}
+@media(prefers-reduced-motion:reduce){.intro-sound-label{transform:translate(calc(50vw - 65px),calc(100dvh - 110px))!important}.archive-row:hover .archive-title,.role-link:hover h3{transform:none}}
